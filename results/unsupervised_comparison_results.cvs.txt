@@ -1,0 +1,9 @@
+Dataset,Method,Backbone,Coreset Ratio,Image AUROC,Pixel AUROC,Image F1-Score,Fitting Time (s),Inference Speed (ms/img),Memory Points,Memory Size (MB)
+Surface Crack,SPADE,resnet18,100%,0.9973,0.8056,0.9950,25.87,191.55,627200,1225.00
+Surface Crack,PaDiM,resnet18,N/A,0.9973,0.7857,0.9972,5.50,34.83,784,30.21
+Surface Crack,PatchCore,resnet18,10%,0.9975,0.8031,0.9956,370.52,42.36,62720,122.50
+Surface Crack,PatchCore,resnet50,10%,0.9982,0.7856,0.9972,372.68,47.42,62720,122.50
+DeepCrack (Cross-eval),SPADE,resnet18,100%,nan,0.9418,1.0000,24.17,212.79,627200,1225.00
+DeepCrack (Cross-eval),PaDiM,resnet18,N/A,nan,0.9208,1.0000,5.46,35.95,784,30.21
+DeepCrack (Cross-eval),PatchCore,resnet18,10%,nan,0.9422,1.0000,369.43,43.43,62720,122.50
+DeepCrack (Cross-eval),PatchCore,resnet50,10%,nan,0.9289,1.0000,371.68,49.45,62720,122.50
