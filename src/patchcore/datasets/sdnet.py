@@ -29,6 +29,18 @@ class SDNETDataset(torch.utils.data.Dataset):
         self.imagesize = imagesize
         self.use_pseudo_masks = use_pseudo_masks
         
+        # Robust path resolution to handle parent wrapper directories on Kaggle
+        actual_source = source
+        if source and os.path.exists(source):
+            direct_exists = any(os.path.exists(os.path.join(source, f)) for f in ["Decks", "Pavements", "Walls"])
+            if not direct_exists:
+                for d in os.listdir(source):
+                    sub_path = os.path.join(source, d)
+                    if os.path.isdir(sub_path):
+                        if any(os.path.exists(os.path.join(sub_path, f)) for f in ["Decks", "Pavements", "Walls"]):
+                            actual_source = sub_path
+                            break
+
         # Map classname to folders in SDNET2018
         # SDNET2018 contains folders: Decks, Pavements, Walls
         folders = []
@@ -47,12 +59,12 @@ class SDNETDataset(torch.utils.data.Dataset):
         pos_files = []
         
         for folder in folders:
-            folder_path = os.path.join(source, folder)
+            folder_path = os.path.join(actual_source, folder)
             if not os.path.exists(folder_path):
                 # Fallback check for casing
-                for d in os.listdir(source):
+                for d in os.listdir(actual_source):
                     if d.lower() == folder.lower():
-                        folder_path = os.path.join(source, d)
+                        folder_path = os.path.join(actual_source, d)
                         break
                         
             if not os.path.exists(folder_path):

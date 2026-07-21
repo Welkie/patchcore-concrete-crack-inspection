@@ -201,7 +201,7 @@ def main():
 
     # 3. DeepCrack (Cross-dataset evaluation)
     # Train on Surface Crack normal images, test on DeepCrack
-    dc_test = DeepCrackDataset(args.deepcrack_path, split=DatasetSplit.TEST)
+    dc_test = DeepCrackDataset(args.deepcrack_path, normal_source=args.surface_crack_path, split=DatasetSplit.TEST)
     dc_test_loader = DataLoader(dc_test, batch_size=4, shuffle=False, num_workers=2, pin_memory=pin)
     print(f"DeepCrack (Cross-dataset): Train samples={len(sc_train)} (using Surface Crack normal), Test samples={len(dc_test)}")
 

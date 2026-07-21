@@ -14,6 +14,7 @@ class DeepCrackDataset(torch.utils.data.Dataset):
     def __init__(
         self,
         source,
+        normal_source=None,
         classname="deepcrack",
         resize=256,
         imagesize=224,
@@ -26,24 +27,33 @@ class DeepCrackDataset(torch.utils.data.Dataset):
         self.resize = resize
         self.imagesize = imagesize
         
+        # Robust path resolution to handle parent wrapper directories on Kaggle
+        actual_source = source
+        if source and os.path.exists(source):
+            direct_exists = any(os.path.exists(os.path.join(source, f)) for f in ["test_img", "train_img"])
+            if not direct_exists:
+                for d in os.listdir(source):
+                    sub_path = os.path.join(source, d)
+                    if os.path.isdir(sub_path):
+                        if any(os.path.exists(os.path.join(sub_path, f)) for f in ["test_img", "train_img"]):
+                            actual_source = sub_path
+                            break
+
         # Determine paths
-        # DeepCrack usually has train_img, train_lab, test_img, test_lab
-        # Let's support both test and train splits, but note that for Unsupervised AD,
-        # training on DeepCrack directly isn't typical since all train images have cracks.
         if split == DatasetSplit.TRAIN or split == "train":
-            img_dir = os.path.join(source, "train_img")
-            lab_dir = os.path.join(source, "train_lab")
+            img_dir = os.path.join(actual_source, "train_img")
+            lab_dir = os.path.join(actual_source, "train_lab")
         else:
-            img_dir = os.path.join(source, "test_img")
-            lab_dir = os.path.join(source, "test_lab")
+            img_dir = os.path.join(actual_source, "test_img")
+            lab_dir = os.path.join(actual_source, "test_lab")
             
         if not os.path.exists(img_dir):
             # Fallback for alternative names
-            for d in os.listdir(source):
+            for d in os.listdir(actual_source):
                 if d.lower() in [f"{split.value}_img", "test_img" if split == DatasetSplit.TEST else "train_img"]:
-                    img_dir = os.path.join(source, d)
+                    img_dir = os.path.join(actual_source, d)
                 elif d.lower() in [f"{split.value}_lab", "test_lab" if split == DatasetSplit.TEST else "train_lab"]:
-                    lab_dir = os.path.join(source, d)
+                    lab_dir = os.path.join(actual_source, d)
 
         if not os.path.exists(img_dir):
             raise ValueError(f"Could not find image folder {img_dir} in source {source}")
@@ -59,7 +69,6 @@ class DeepCrackDataset(torch.utils.data.Dataset):
         for f in img_files:
             img_path = os.path.join(img_dir, f)
             # Find corresponding mask
-            # Try same name with multiple extensions
             mask_path = None
             base_name = os.path.splitext(f)[0]
             if os.path.exists(lab_dir):
@@ -69,11 +78,33 @@ class DeepCrackDataset(torch.utils.data.Dataset):
                         mask_path = possible_mask
                         break
             
-            # Since this is a crack dataset, all images are anomalous/crack (except if mask is completely empty, which is rare)
+            # Since this is a crack dataset, all images are anomalous/crack
             is_anomaly = 1
             anomaly_type = "crack"
             self.data.append((img_path, anomaly_type, is_anomaly))
             self.data_to_iterate.append(["deepcrack", anomaly_type, img_path, mask_path])
+
+        # If normal_source is provided for testing, mix in normal images to enable Image AUROC calculation
+        if split == DatasetSplit.TEST and normal_source:
+            actual_normal_source = normal_source
+            if os.path.exists(normal_source):
+                if not os.path.exists(os.path.join(normal_source, "Negative")):
+                    for d in os.listdir(normal_source):
+                        sub = os.path.join(normal_source, d)
+                        if os.path.isdir(sub) and os.path.exists(os.path.join(sub, "Negative")):
+                            actual_normal_source = sub
+                            break
+            
+            neg_dir = os.path.join(actual_normal_source, "Negative")
+            if os.path.exists(neg_dir):
+                neg_files = sorted([
+                    os.path.join(neg_dir, f) for f in os.listdir(neg_dir)
+                    if f.lower().endswith(('.png', '.jpg', '.jpeg'))
+                ])
+                # Mix in up to 100 normal images from Surface Crack Detection
+                for f in neg_files[:100]:
+                    self.data.append((f, "good", 0))
+                    self.data_to_iterate.append(["deepcrack", "good", f, None])
 
         self.transform_img = transforms.Compose([
             transforms.Resize(resize),
