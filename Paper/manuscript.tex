@@ -53,15 +53,9 @@ The inspection of concrete surfaces is a critical component of preventative main
 With the advent of computer vision and deep learning, automated surface inspection has progressed rapidly. Existing literature heavily treats concrete crack detection as a supervised binary classification problem (crack vs. no-crack) or a supervised semantic segmentation task \cite{Cha2017DeepLC,Golding2022CrackDI,liu2019computer}. Researchers have trained various deep Convolutional Neural Networks (CNNs) like ResNet, VGG, MobileNet, and EfficientNet, or applied object detectors like YOLO and Faster R-CNN on large labeled datasets. While supervised models yield impressive classification and bounding box outcomes, their deployment in industrial and real-world infrastructure faces two fundamental constraints:
 First, defective images of cracked concrete are rare in practice compared to the large amount of normal concrete images. Annotating these defects is expensive and works only for specific structures since concrete texture changes depending on the environment. Second, cracks have very different forms such as width, direction, and shape. This makes supervised models overfit to their training images, failing to generalize to new cracks.
 
-To address these challenges, this paper presents a paradigm shift, reframing the problem as \textbf{cold-start visual anomaly detection}. The proposed approach trains memory-bank-based (SPADE, PatchCore \cite{roth2022towards}) and probabilistic (PaDiM \cite{defard2021padim}) anomaly detection frameworks using exclusively normal (crack-free) concrete surface images. During inference, any concrete surface containing cracks is identified as an anomaly because it deviates from the nominal patch feature distribution stored or modeled from normal data. Additionally, these frameworks naturally generate patch-level anomaly scores, which are upsampled to construct spatial anomaly heatmaps, localizing the crack regions without requiring any pixel-level annotations or bounding box supervisions.
+To address these challenges, this paper presents a paradigm shift, reframing the problem as \textbf{cold-start visual anomaly detection}. The proposed approach trains memory-bank-based (SPADE, PatchCore \cite{roth2022towards}) and probabilistic (PaDiM \cite{defard2021padim}) anomaly detection frameworks using exclusively normal (crack-free) concrete surface images. During inference, any concrete surface containing cracks is identified as an anomaly because it deviates from the nominal patch feature distribution stored or modeled from normal data. Additionally, these frameworks naturally generate patch-level anomaly scores, which are upsampled to construct spatial anomaly heatmaps, localizing the crack regions without requiring any pixel-level annotations or bounding box supervisions. 
 
-Specifically, the core contributions of this study are four-fold:
-\begin{itemize}
-    \item \textbf{Methodological Paradigm Shift:} We formulate and systematically implement the cold-start defect detection framework for concrete visual inspection. Unlike traditional supervised binary classifiers that require manual labeling of scarce defective images, our approach models nominal surface textures exclusively, learning to detect cracks as spatial anomalies.
-    \item \textbf{Cross-Dataset Generalization Bounds:} We evaluate the generalization ability of unsupervised patch-level embeddings across domains. By training on normal Mendeley concrete textures and testing directly on DeepCrack's unseen topological formations, we show that unsupervised models achieve superior transferability compared to traditional classifiers, which degrade heavily under domain shifts.
-    \item \textbf{Feature-Space Compression under Rough Geologies:} We study how coreset memory subsampling behaves when applied to noisy, high-entropy geological surfaces (such as bridge decks with shadows and scaling). We demonstrate that coreset compression acts as a spatial feature regularizer, eliminating local texture noise and rendering the model robust to environmental variations.
-    \item \textbf{Quantitative Pixel-Level Localization:} We present a rigorous pixel-level quantitative evaluation of crack localization accuracy (Pixel AUROC) against pseudo-masks. This establishes a baseline for unsupervised spatial defect pinning, showing that high-precision local defect maps can be generated without any pixel-level supervision during training.
-\end{itemize}
+We conduct a comprehensive evaluation of these unsupervised frameworks across three benchmark concrete defect databases: Mendeley Surface Crack Detection \cite{ozgenel2018performance}, SDNET2018 (Decks subset) \cite{dorafshan2018sdnet2018}, and DeepCrack \cite{zou2019deepcrack}. Rather than treating concrete crack detection as a binary classification problem where models require extensive defect examples that are difficult to gather, we reframe the workflow. We first study if unsupervised memory-bank models (SPADE, PatchCore) and probabilistic patch distribution models (PaDiM), originally designed for industrial manufacturing defects, can accurately recognize concrete crack formations having trained only on normal, crack-free surfaces. From this baseline, we explore the models' capacity to localize crack coordinates spatially without any pixel-level segmentation maps, leveraging only nearest-neighbor or density feature distances. To render the frameworks practical for deployment on real-world edge devices, we investigate resource efficiency and latency trade-offs. Finally, we evaluate cross-dataset generalization by training models on Mendeley normal concrete surfaces and evaluating them directly on DeepCrack, mapping the generalization boundaries of cold-start inspection.
 
 The source code for our experiments is publicly available at \url{https://github.com/Welkie/patchcore-concrete-crack-inspection.git}.
 
@@ -221,21 +215,21 @@ To visually inspect the localization quality, we examine the qualitative crack h
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.9\textwidth]{results/visual_localization_surface_crack.png}
+    \includegraphics[width=0.9\textwidth]{results/visual_localization_surface_crack.jpg}
     \caption{Qualitative Crack Heatmap Overlays on Mendeley Surface Crack Detection.}
     \label{fig:localization_surface_crack}
 \end{figure}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.9\textwidth]{results/visual_localization_sdnet2018_decks.png}
+    \includegraphics[width=0.9\textwidth]{results/visual_localization_sdnet2018_decks.jpg}
     \caption{Qualitative Crack Heatmap Overlays on SDNET2018 (Decks subset).}
     \label{fig:localization_sdnet}
 \end{figure}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.9\textwidth]{results/visual_localization_deepcrack_cross-eval.png}
+    \includegraphics[width=0.9\textwidth]{results/visual_localization_deepcrack_cross-eval.jpg}
     \caption{Qualitative Crack Heatmap Overlays on DeepCrack (Cross-dataset evaluation).}
     \label{fig:localization_deepcrack}
 \end{figure}
