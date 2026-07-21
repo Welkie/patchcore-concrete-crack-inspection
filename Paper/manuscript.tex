@@ -39,9 +39,9 @@
 \maketitle
 
 \begin{abstract}
-Concrete surface cracks are major indicators of structural degradation in civil infrastructure. While supervised deep learning methods achieve high classification accuracy, they depend heavily on extensive labeled defect datasets, which are costly and difficult to obtain in real-world visual inspection. This study reframes concrete crack inspection as a cold-start anomaly detection task, utilizing the PatchCore framework. By training exclusively on crack-free (normal) surface images, the system detects cracks at inference time as deviations from the learned nominal distribution. We systematically evaluate pre-trained ResNet-18 and ResNet-50 backbones under various coreset subsampling ratios (1\%, 5\%, 10\%, 25\%, and 50\%) on the Kaggle Surface Crack Detection dataset. PatchCore achieves a near-perfect image-level Area Under the Receiver Operating Characteristic (AUROC) of 0.9981 and an F1-score of 0.9972 using only 800 training samples. Furthermore, using nearest-neighbor distance mapping, it generates high-resolution anomaly heatmaps that successfully localize crack regions without any pixel-level segmentation training, achieving up to 0.8050 pixel-level AUROC against Canny edge-based pseudo-masks. Our data-efficiency experiments reveal that PatchCore using zero defective training samples outperforms supervised ResNet-50 and EfficientNet-B0 classifiers in low-defect regimes, where the supervised baselines require at least 50 positive training images to reach comparable classification performance. These findings demonstrate that unsupervised cold-start anomaly detection is a highly viable, robust, and data-efficient alternative for civil infrastructure safety monitoring.
+Concrete surface cracks are major indicators of structural degradation in civil infrastructure. While supervised deep learning methods achieve high classification accuracy, they depend heavily on extensive labeled defect datasets, which are costly and difficult to obtain in real-world visual inspection. This study reframes concrete crack inspection as a cold-start anomaly detection task, evaluating and comparing three unsupervised frameworks: SPADE, PaDiM, and PatchCore. By training exclusively on crack-free (normal) surface images, the systems detect cracks at inference time as deviations from the learned nominal distribution. We systematically evaluate these frameworks across three diverse concrete and surface crack datasets: Mendeley Surface Crack, SDNET2018 (Decks), and DeepCrack (used for cross-dataset generalization evaluation). PatchCore (ResNet-50) achieves a near-perfect image-level Area Under the Receiver Operating Characteristic (AUROC) of 0.9983 on Mendeley Surface Crack, and generalizes strongly to DeepCrack with 1.0000 Image AUROC. Furthermore, using nearest-neighbor and Gaussian density mappings, these frameworks generate high-resolution anomaly heatmaps that successfully localize crack regions without any pixel-level segmentation training, achieving up to 0.9599 pixel-level AUROC on DeepCrack. Our comparative analysis reveals that a 10\% coreset subsampling ratio enables PatchCore to reduce memory index requirements by 90\% and accelerate inference by 5x compared to SPADE, while maintaining virtually equivalent classification and localization performance. These findings demonstrate that unsupervised cold-start anomaly detection is a highly viable, robust, and resource-efficient alternative for civil infrastructure safety monitoring.
 
-\keywords{Concrete crack inspection, Cold-start anomaly detection, PatchCore, Coreset subsampling, Anomaly localization, Data efficiency.}
+\keywords{Concrete crack inspection, Cold-start anomaly detection, Unsupervised learning, PatchCore, PaDiM, SPADE, Anomaly localization, Cross-dataset generalization.}
 \end{abstract}
 
 % ---- Introduction ----
@@ -53,9 +53,9 @@ The inspection of concrete surfaces is a critical component of preventative main
 With the advent of computer vision and deep learning, automated surface inspection has progressed rapidly. Existing literature heavily treats concrete crack detection as a supervised binary classification problem (crack vs. no-crack) or a supervised semantic segmentation task \cite{Cha2017DeepLC,Golding2022CrackDI,liu2019computer}. Researchers have trained various deep Convolutional Neural Networks (CNNs) like ResNet, VGG, MobileNet, and EfficientNet, or applied object detectors like YOLO and Faster R-CNN on large labeled datasets. While supervised models yield impressive classification and bounding box outcomes, their deployment in industrial and real-world infrastructure faces two fundamental constraints:
 First, defective images of cracked concrete are rare in practice compared to the large amount of normal concrete images. Annotating these defects is expensive and works only for specific structures since concrete texture changes depending on the environment. Second, cracks have very different forms such as width, direction, and shape. This makes supervised models overfit to their training images, failing to generalize to new cracks.
 
-To address these challenges, this paper presents a paradigm shift, reframing the problem as \textbf{cold-start visual anomaly detection}. The proposed approach trains a memory-bank-based anomaly detection framework, PatchCore \cite{roth2022towards}, using exclusively normal (crack-free) concrete surface images. During inference, any concrete surface containing cracks is identified as an anomaly because it deviates from the nominal patch feature distribution stored in the memory bank. Additionally, PatchCore naturally generates patch-level anomaly scores, which are upsampled to construct spatial anomaly heatmaps, localizing the crack regions without requiring any pixel-level annotations or bounding box supervisions. 
+To address these challenges, this paper presents a paradigm shift, reframing the problem as \textbf{cold-start visual anomaly detection}. The proposed approach trains memory-bank-based (SPADE, PatchCore \cite{roth2022towards}) and probabilistic (PaDiM \cite{defard2021padim}) anomaly detection frameworks using exclusively normal (crack-free) concrete surface images. During inference, any concrete surface containing cracks is identified as an anomaly because it deviates from the nominal patch feature distribution stored or modeled from normal data. Additionally, these frameworks naturally generate patch-level anomaly scores, which are upsampled to construct spatial anomaly heatmaps, localizing the crack regions without requiring any pixel-level annotations or bounding box supervisions. 
 
-We conduct a comprehensive evaluation of this framework on the Kaggle Surface Crack Detection dataset \cite{ozgenel2018performance}, referencing other benchmark concrete defect databases such as SDNET2018 \cite{dorafshan2018sdnet2018}. Rather than treating concrete crack detection as a binary classification problem where models require extensive defect examples that are difficult to gather, we reframe the workflow. We first study if PatchCore, an unsupervised memory-bank model originally designed for industrial manufacturing defects, can accurately recognize concrete crack formations having trained only on normal, crack-free surfaces. From this baseline, we explore the model's capacity to localize crack coordinates spatially without any pixel-level segmentation maps, leveraging only nearest-neighbor feature distances. To render the framework practical for deployment on real-world edge devices, we investigate the trade-offs of coreset subsampling ratios (ranging from 1\% to 50\%) on both accuracy and execution speed. Finally, to evaluate the practical advantage of this unsupervised approach, we compare its performance against standard supervised CNN baselines (ResNet-50 and EfficientNet-B0) across varying levels of positive training sample sizes, mapping the data efficiency of cold-start inspection.
+We conduct a comprehensive evaluation of these unsupervised frameworks across three benchmark concrete defect databases: Mendeley Surface Crack Detection \cite{ozgenel2018performance}, SDNET2018 (Decks subset) \cite{dorafshan2018sdnet2018}, and DeepCrack \cite{zou2019deepcrack}. Rather than treating concrete crack detection as a binary classification problem where models require extensive defect examples that are difficult to gather, we reframe the workflow. We first study if unsupervised memory-bank models (SPADE, PatchCore) and probabilistic patch distribution models (PaDiM), originally designed for industrial manufacturing defects, can accurately recognize concrete crack formations having trained only on normal, crack-free surfaces. From this baseline, we explore the models' capacity to localize crack coordinates spatially without any pixel-level segmentation maps, leveraging only nearest-neighbor or density feature distances. To render the frameworks practical for deployment on real-world edge devices, we investigate resource efficiency and latency trade-offs. Finally, we evaluate cross-dataset generalization by training models on Mendeley normal concrete surfaces and evaluating them directly on DeepCrack, mapping the generalization boundaries of cold-start inspection.
 
 The source code for our experiments is publicly available at \url{https://github.com/Welkie/patchcore-concrete-crack-inspection.git}.
 
@@ -78,9 +78,10 @@ PatchCore, proposed by Roth et al. \cite{roth2022towards}, circumvented general 
 \label{sec:materials_methods}
 
 \subsection{Dataset and Splitting Strategy}
-We evaluate the proposed cold-start framework on the Surface Crack Detection dataset hosted on Kaggle \cite{ozgenel2018performance}, which is widely compared with other civil engineering datasets like SDNET2018 \cite{dorafshan2018sdnet2018}. The dataset comprises 4,000 high-resolution RGB images ($227 \times 227$ pixels) divided into 2,000 positive (cracked concrete) and 2,000 negative (normal/crack-free concrete) samples. 
-
-To simulate a realistic cold-start industrial inspection pipeline, we establish an asymmetric splitting strategy. Since unsupervised anomaly detection models train only on normal samples, we split the dataset to match a real-world setup. The training set contains 800 normal images (80\% of all normal images) and does not use any cracked images. The validation set has 100 normal images and 100 cracked images, which helps choose the decision threshold. The final test set consists of 100 normal images and 900 cracked images, which we use to evaluate detection performance and crack localization. This setup mimics actual operations where normal concrete images are easy to collect, but defects are only seen during testing.
+We evaluate the proposed cold-start frameworks across three distinct concrete surface databases: Mendeley Surface Crack Detection \cite{ozgenel2018performance}, SDNET2018 (Decks subset) \cite{dorafshan2018sdnet2018}, and DeepCrack \cite{zou2019deepcrack}.
+For Mendeley Surface Crack Detection, which comprises 40,000 images, we follow an asymmetric splitting strategy simulating a realistic cold-start industrial inspection pipeline. Training is done using only normal samples, splitting to match a real-world setup: 800 normal images are used for training, 100 normal and 100 cracked images for validation, and 100 normal and 900 cracked images for testing.
+For the SDNET2018 Decks subset, we follow the same proportions with 800 normal bridge deck images for training, 100 normal and 100 cracked deck images for validation, and 100 normal and 900 cracked deck images for testing.
+For DeepCrack, which has pixel-level annotations for crack segmentation, we use it for evaluating cross-dataset generalization. The models are trained on the 800 normal images of Mendeley Surface Crack, and evaluated on the DeepCrack test set (comprising 115 cracked images mixed with 100 normal images from Mendeley to enable balanced evaluation).
 
 \subsection{PatchCore Pipeline Architecture}
 The framework uses a pre-trained ImageNet backbone (ResNet-18 or ResNet-50) \cite{he2016deep} without fine-tuning. The operational pipeline consists of three main phases: feature extraction, memory bank construction with coreset selection, and anomaly scoring.
@@ -127,138 +128,122 @@ The Kaggle Surface Crack Detection dataset only provides image-level binary labe
 \subsection{Experimental Configuration}
 All experiments are implemented in PyTorch and run on a single NVIDIA T4 GPU. Feature similarity searches are executed using the FAISS library to ensure high-speed nearest-neighbor computations. The input images are resized to $256 \times 256$ pixels and center-cropped to $224 \times 224$ pixels. 
 
-\subsection{Coreset Subsampling Ablation and Execution Latency}
-We first analyze the baseline detection capability of PatchCore along with the impact of coreset subsampling ratios $\lambda \in \{1\%, 5\%, 10\%, 25\%, 50\%\}$ using ResNet-18 and ResNet-50 backbones. The results are summarized in Table~\ref{tab:patchcore_ablation}.
+\subsection{Comparative Evaluation on Crack Datasets}
+We conduct a comparative evaluation of the three unsupervised visual anomaly detection frameworks: SPADE, PaDiM, and PatchCore (using ResNet-18 and ResNet-50 backbones at a 10\% coreset subsampling ratio). We analyze their anomaly detection and localization performance along with execution time and memory requirements across the three datasets: Mendeley Surface Crack, SDNET2018 (Decks subset), and DeepCrack (Cross-dataset evaluation). The quantitative results are summarized in Table~\ref{tab:unsupervised_comparison}.
 
 \begin{table}[H]
 \centering
-\caption{PatchCore coreset ablation results on the Concrete Surface Crack dataset showing detection performance and resource metrics.}
-\label{tab:patchcore_ablation}
+\caption{Quantitative comparison of unsupervised anomaly detection methods (SPADE, PaDiM, and PatchCore) across three crack inspection datasets.}
+\label{tab:unsupervised_comparison}
 \resizebox{\textwidth}{!}{%
-\begin{tabular}{lcccccccc}
+\begin{tabular}{llccccccc}
 \toprule
-\textbf{Backbone} & \makecell{\textbf{Coreset}\\\textbf{Ratio}} & \makecell{\textbf{Image}\\\textbf{AUROC}} & \makecell{\textbf{Pixel}\\\textbf{AUROC}} & \makecell{\textbf{Image}\\\textbf{F1-Score}} & \makecell{\textbf{Fitting}\\\textbf{Time (s)}} & \makecell{\textbf{Latency}\\\textbf{(ms/img)}} & \makecell{\textbf{Memory}\\\textbf{Points}} & \makecell{\textbf{Memory}\\\textbf{Size (MB)}} \\
+\textbf{Dataset} & \textbf{Method} & \textbf{Backbone} & \makecell{\textbf{Coreset}\\\textbf{Ratio}} & \makecell{\textbf{Image}\\\textbf{AUROC}} & \makecell{\textbf{Pixel}\\\textbf{AUROC}} & \makecell{\textbf{Image}\\\textbf{F1-Score}} & \makecell{\textbf{Fitting}\\\textbf{Time (s)}} & \makecell{\textbf{Latency}\\\textbf{(ms/img)}} \\
 \midrule
-\multirow{5}{*}{ResNet-18} 
- & 1\%  & 0.9969 & 0.7997 & 0.9945 & 53.84  & 31.37  & 6,272   & 12.25  \\
- & 5\%  & 0.9980 & 0.8011 & 0.9956 & 196.47 & 35.73  & 31,360  & 61.25  \\
- & 10\% & 0.9979 & 0.8027 & 0.9956 & 376.05 & 41.08  & 62,720  & 122.50 \\
- & 25\% & 0.9978 & 0.8050 & 0.9956 & 907.82 & 66.88  & 156,800 & 306.25 \\
- & 50\% & 0.9974 & 0.8050 & 0.9950 & 1790.89& 110.64 & 313,600 & 612.50 \\
+\multirow{4}{*}{Surface Crack} 
+ & SPADE & ResNet-18 & 100\% & 0.9973 & 0.8056 & 0.9950 & 27.33 & 197.61 \\
+ & PaDiM & ResNet-18 & N/A   & 0.9973 & 0.7857 & 0.9972 & 5.61  & 36.93  \\
+ & PatchCore & ResNet-18 & 10\%  & 0.9977 & 0.8030 & 0.9950 & 380.10& 44.28  \\
+ & PatchCore & ResNet-50 & 10\%  & 0.9983 & 0.7862 & 0.9972 & 382.50& 49.12  \\
 \midrule
-\multirow{5}{*}{ResNet-50} 
- & 1\%  & 0.9973 & 0.7827 & 0.9967 & 61.49  & 34.35  & 6,272   & 12.25  \\
- & 5\%  & 0.9968 & 0.7856 & 0.9972 & 202.21 & 39.83  & 31,360  & 61.25  \\
- & 10\% & 0.9976 & 0.7864 & 0.9972 & 379.12 & 47.15  & 62,720  & 122.50 \\
- & 25\% & 0.9980 & 0.7865 & 0.9972 & 909.27 & 73.48  & 156,800 & 306.25 \\
- & 50\% & 0.9981 & 0.7865 & 0.9972 & 1791.23& 118.11 & 313,600 & 612.50 \\
+\multirow{4}{*}{\makecell{SDNET2018\\(Decks)}} 
+ & SPADE & ResNet-18 & 100\% & 0.8547 & 0.7862 & 0.9489 & 26.64 & 212.29 \\
+ & PaDiM & ResNet-18 & N/A   & 0.8247 & 0.7656 & 0.9478 & 5.85  & 36.50  \\
+ & PatchCore & ResNet-18 & 10\%  & 0.8574 & 0.7811 & 0.9489 & 380.88& 44.18  \\
+ & PatchCore & ResNet-50 & 10\%  & 0.8859 & 0.7393 & 0.9479 & 382.42& 49.20  \\
+\midrule
+\multirow{4}{*}{\makecell{DeepCrack\\(Cross-eval)}} 
+ & SPADE & ResNet-18 & 100\% & 1.0000 & 0.9597 & 1.0000 & 26.29 & 216.59 \\
+ & PaDiM & ResNet-18 & N/A   & 0.9930 & 0.9451 & 0.9748 & 5.88  & 38.10  \\
+ & PatchCore & ResNet-18 & 10\%  & 1.0000 & 0.9599 & 1.0000 & 378.70& 44.37  \\
+ & PatchCore & ResNet-50 & 10\%  & 1.0000 & 0.9507 & 1.0000 & 381.39& 51.25  \\
 \bottomrule
 \end{tabular}%
 }
 \end{table}
 
-The experimental data demonstrates that PatchCore achieves a near-perfect image-level AUROC of over 0.996 across all ratios and backbones. The highest image-level AUROC of 0.9981 is achieved using ResNet-50 at a 50\% coreset ratio, while ResNet-18 achieves a peak image-level AUROC of 0.9980 at a 5\% ratio. Furthermore, compressing the memory bank using coreset sampling dramatically reduces inference latency and memory size with negligible impact on detection accuracy. For instance, reducing the coreset ratio of ResNet-18 from 50\% to 10\% reduces the memory index size from 612.50 MB to 122.50 MB and speeds up inference from 110.64 ms/image to 41.08 ms/image, while the pixel localization AUROC only shifts from 0.8050 to 0.8027.
+The experimental data demonstrates that all unsupervised methods achieve high detection capability. On the Surface Crack dataset, PatchCore with ResNet-50 achieves the highest image-level AUROC of 0.9983, while on the more complex SDNET2018 Decks dataset (which contains multiple shadows and surface scaling noise), it achieves 0.8859 AUROC. In the cross-dataset evaluation on DeepCrack, all methods show near-perfect generalization to a new geological texture, reaching 1.0000 Image AUROC for SPADE and PatchCore, and 0.9930 for PaDiM.
 
-\subsection{Comparison with Supervised Classification under Data Scarcity}
-To evaluate how the cold-start paradigm compares with standard supervised models in resource-limited scenarios, we train ResNet-50 \cite{he2016deep} and EfficientNet-B0 \cite{tan2019efficientnet} classifiers under a fully supervised paradigm. The models are trained for 10 epochs using Adam optimizer ($\text{LR}=10^{-4}$, batch size 16). We vary the availability of labeled cracked images during training ($N_{\text{pos}} \in \{5, 10, 50, 100, 200\}$) while keeping 1,600 normal images to evaluate data efficiency. The baseline testing results are presented in Table~\ref{tab:supervised_baselines}.
-
-\begin{table}[H]
-\centering
-\caption{Supervised baseline classification results under varying positive training sample sizes for data efficiency comparison.}
-\label{tab:supervised_baselines}
-\resizebox{\textwidth}{!}{%
-\begin{tabular}{lcccccc}
-\toprule
-\textbf{Model} & \makecell{\textbf{Num Training}\\\textbf{Positives}} & \textbf{Accuracy} & \textbf{AUROC} & \textbf{F1-Score} & \textbf{Precision} & \textbf{Recall} \\
-\midrule
-\multirow{5}{*}{ResNet-50} 
- & 5   & 0.4490 & 0.9064 & 0.5588 & 1.0000 & 0.3878 \\
- & 10  & 0.3180 & 0.8522 & 0.3900 & 1.0000 & 0.2422 \\
- & 50  & 0.9710 & 1.0000 & 0.9836 & 1.0000 & 0.9678 \\
- & 100 & 0.9820 & 1.0000 & 0.9899 & 1.0000 & 0.9800 \\
- & 200 & 0.9610 & 0.9983 & 0.9779 & 1.0000 & 0.9567 \\
-\midrule
-\multirow{5}{*}{EfficientNet-B0} 
- & 5   & 0.2240 & 0.9515 & 0.2422 & 1.0000 & 0.1378 \\
- & 10  & 0.3490 & 0.9049 & 0.4334 & 1.0000 & 0.2767 \\
- & 50  & 0.9610 & 0.9995 & 0.9779 & 1.0000 & 0.9567 \\
- & 100 & 0.9660 & 1.0000 & 0.9807 & 1.0000 & 0.9622 \\
- & 200 & 0.9540 & 0.9999 & 0.9738 & 1.0000 & 0.9489 \\
-\bottomrule
-\end{tabular}%
-}
-\end{table}
-
-The comparative results indicate that supervised classifiers are highly sensitive to class imbalance and data scarcity. With fewer than 10 positive training samples, the supervised models fail to generalize, yielding F1-scores as low as 0.2422 due to extreme recall failures. The supervised models require at least 50 positive training images to match the F1 performance that unsupervised PatchCore achieves with **zero** positive training samples.
+\subsection{Resource Efficiency and Latency Trade-Offs}
+While detection and localization accuracies are competitive across methods, their execution footprints differ significantly.
+SPADE requires storing 627,200 feature points in memory (consuming 1225.00 MB), leading to high search latency (e.g., 216.59 ms/image on DeepCrack). PaDiM fits a local Gaussian distribution, achieving a tiny memory footprint of 30.21 MB and fast inference speed of 38.10 ms/image, but yields slightly lower detection accuracy.
+PatchCore (ResNet-18, 10\% coreset ratio) achieves virtually the same Image and Pixel AUROC as SPADE, but reduces the memory index to 62,720 points (122.50 MB, a 90\% saving) and speeds up inference by 5x to 44.28 ms/image, demonstrating the optimal balance for edge-device deployment.
 
 \section{Discussion}
 \label{sec:discussion}
 
-\subsection{Unsupervised Crack Detection and Localization Analysis}
-Unsupervised anomaly detection has historically been viewed as a harder problem than supervised classification because the network is never exposed to defect examples. However, our findings reveal that PatchCore achieves outstanding performance on concrete cracks (Image AUROC > 0.997). This high accuracy is because concrete cracks introduce a sharp disruption in local texture. Intact concrete consists of homogeneous, semi-periodic rough textures. When a crack is present, it forms a dark, linear geometric anomaly that behaves as a clear out-of-distribution patch compared to normal concrete patches.
+\subsection{Unsupervised Generalization and Localization Analysis}
+Unsupervised anomaly detection has historically been viewed as a harder problem than supervised classification because the network is never exposed to defect examples. However, our findings reveal that unsupervised models achieve outstanding performance on concrete cracks. This is because concrete cracks introduce a sharp disruption in local texture. Intact concrete consists of homogeneous, semi-periodic rough textures. When a crack is present, it forms a dark, linear geometric anomaly that behaves as a clear out-of-distribution patch compared to normal concrete patches.
 
-Furthermore, we evaluate the spatial localization capacity. ResNet-18 achieves a pixel-level AUROC of 0.8050, outperforming ResNet-50 which scores 0.7865. This result suggests that the feature representation of ResNet-18 contains finer spatial detail, while ResNet-50 layer activations are more semantically compressed, slightly blurring the local patch boundary.
+Furthermore, we evaluate the spatial localization capacity. Across all datasets, ResNet-18 backbones yield higher pixel-level AUROC than ResNet-50 backbones. For instance, on DeepCrack, PatchCore with ResNet-18 achieves a pixel-level AUROC of 0.9599, outperforming ResNet-50 which scores 0.9507. This suggests that the feature representations from intermediate layers of ResNet-18 preserve finer spatial details, whereas ResNet-50 features are more semantically compressed, slightly blurring the localized patch boundaries during interpolation.
 
-\subsection{Inference Speed vs. Data Efficiency Trade-Off}
+\subsection{Performance Curves and Latency Behaviors}
 To visualize the performance behaviors, we refer to the curves generated in our experiments.
 
 \begin{figure}[H]
     \centering
     \begin{subfigure}[b]{0.48\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{results/plot_auroc_vs_coreset.png}
-        \caption{Image AUROC vs. Coreset Ratio}
-        \label{fig:auroc_vs_coreset}
+        \includegraphics[width=\textwidth]{results/plot_unsupervised_auroc_comparison.png}
+        \caption{Image-Level AUROC}
+        \label{fig:auroc_comparison}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.48\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{results/plot_latency_vs_coreset.png}
-        \caption{Inference Latency vs. Coreset Ratio}
-        \label{fig:latency_vs_coreset}
+        \includegraphics[width=\textwidth]{results/plot_unsupervised_localization_comparison.png}
+        \caption{Pixel-Level (Localization) AUROC}
+        \label{fig:localization_comparison}
     \end{subfigure}
-    \caption{Analysis of Coreset Subsampling Ratio Trade-off between accuracy and speed.}
-    \label{fig:coreset_tradeoff}
+    \caption{Unsupervised detection and localization performance comparison across the three datasets.}
+    \label{fig:unsupervised_performance}
 \end{figure}
 
-Fig.~\ref{fig:coreset_tradeoff} illustrates the impact of the coreset ratio. While the image-level AUROC remains stable above 0.996 across all ratios (Fig.~\ref{fig:auroc_vs_coreset}), the inference latency (Fig.~\ref{fig:latency_vs_coreset}) grows linearly. A 10\% coreset ratio provides the optimal trade-off point: it achieves virtually the same detection and localization metrics as the 50\% ratio, but reduces inference time by 60\% and memory size to only 122.50 MB.
+Fig.~\ref{fig:unsupervised_performance} illustrates the detection and localization performance. While the image-level AUROC (Fig.~\ref{fig:auroc_comparison}) remains stable above 0.82 across all methods and datasets, the pixel-level localization AUROC (Fig.~\ref{fig:localization_comparison}) shows that the models successfully track crack locations, reaching up to 0.9599 on DeepCrack.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{results/plot_data_efficiency.png}
-    \caption{Data Efficiency Comparison: Unsupervised PatchCore vs. Supervised CNNs.}
-    \label{fig:data_efficiency}
+    \includegraphics[width=0.7\textwidth]{results/plot_unsupervised_latency_comparison.png}
+    \caption{Average inference latency comparison of SPADE, PaDiM, and PatchCore variants (lower is better).}
+    \label{fig:latency_comparison}
 \end{figure}
 
-Fig.~\ref{fig:data_efficiency} highlights the data efficiency curves. The horizontal lines represent unsupervised PatchCore models trained with zero cracked samples. When supervised models have access to only 5 to 10 positive samples, they perform significantly worse. This demonstrates that in "cold-start" environments where defects are unavailable or extremely rare, unsupervised PatchCore is a far more robust choice.
+Fig.~\ref{fig:latency_comparison} highlights the latency curves. While SPADE has high inference latency (exceeding 190 ms/image due to search overhead), PaDiM and PatchCore maintain low latencies (under 50 ms/image).
 
 \subsection{Qualitative Visualization and Local Anomaly Heatmaps}
-To visually inspect the localization quality, we examine the qualitative crack heatmap overlays for ResNet-18 (Fig.~\ref{fig:localization_resnet18}) and ResNet-50 (Fig.~\ref{fig:localization_resnet50}).
+To visually inspect the localization quality, we examine the qualitative crack heatmap overlays for the datasets in Fig.~\ref{fig:localization_surface_crack}, Fig.~\ref{fig:localization_sdnet}, and Fig.~\ref{fig:localization_deepcrack}.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.95\textwidth]{results/visual_localization_resnet18.png}
-    \caption{Qualitative Crack Heatmap Overlays (ResNet-18, 10\% Coreset).}
-    \label{fig:localization_resnet18}
+    \includegraphics[width=0.9\textwidth]{results/visual_localization_surface_crack.png}
+    \caption{Qualitative Crack Heatmap Overlays on Mendeley Surface Crack Detection.}
+    \label{fig:localization_surface_crack}
 \end{figure}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.95\textwidth]{results/visual_localization_resnet50.png}
-    \caption{Qualitative Crack Heatmap Overlays (ResNet-50, 10\% Coreset).}
-    \label{fig:localization_resnet50}
+    \includegraphics[width=0.9\textwidth]{results/visual_localization_sdnet2018_decks.png}
+    \caption{Qualitative Crack Heatmap Overlays on SDNET2018 (Decks subset).}
+    \label{fig:localization_sdnet}
 \end{figure}
 
-As shown in Fig.~\ref{fig:localization_resnet18} and Fig.~\ref{fig:localization_resnet50}, the generated anomaly heatmaps successfully trace the physical shape and location of the cracks. The heatmaps display strong peak values precisely along the crack trajectories, with zero or minimal background activation on the normal concrete areas. This localization is achieved without any pixel-level supervision or bounding box annotations during training.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{results/visual_localization_deepcrack_cross-eval.png}
+    \caption{Qualitative Crack Heatmap Overlays on DeepCrack (Cross-dataset evaluation).}
+    \label{fig:localization_deepcrack}
+\end{figure}
+
+As shown in these figures, the generated anomaly heatmaps successfully trace the physical shape and location of the cracks. The heatmaps display strong peak values precisely along the crack trajectories, with zero or minimal background activation on the normal concrete areas. This localization is achieved without any pixel-level supervision or bounding box annotations during training, demonstrating the robustness of cold-start visual inspection.
 
 \subsection{Research Limitations and Future Prospects}
-While PatchCore achieves excellent performance, some limitations remain:
-First, PatchCore assumes that normal samples have a similar texture. If a concrete structure has very different surface patterns, joint lines, or markings, it can cause false alarms. Second, we evaluate pixel performance using masks made with Canny edge detection. Although these masks show the crack shapes well, they can have noise. Future studies should use human-annotated masks to test the heatmaps more accurately.
+While unsupervised anomaly detection achieves excellent performance, some limitations remain:
+First, these models assume that normal concrete samples have a homogenous texture. If a concrete structure has very complex surface patterns, joint lines, or markings, it can cause false alarms. Second, we evaluate pixel-level performance using pseudo-masks. Although these masks capture the crack shapes well, they can contain noise. Future studies should use human-annotated masks to test the heatmaps more accurately.
 
 \section{Conclusion and Future Work}
 \label{sec:conclusion}
 
-In this paper, we reframed the concrete surface crack inspection problem as cold-start visual anomaly detection, implementing the PatchCore framework. Training exclusively on 800 normal concrete surface images, PatchCore achieves a near-perfect image-level AUROC of 0.9981 and an F1-score of 0.9972, without requiring any cracked images during training. Furthermore, the framework generates high-quality anomaly heatmaps that accurately localize crack trajectories without any pixel-level supervision, achieving up to 0.8050 pixel-level AUROC. Our comparative analysis confirms that PatchCore drastically outperforms supervised classifiers in low-defect regimes, where supervised baselines require at least 50 positive training images to match PatchCore's zero-shot defect classification performance. Additionally, we demonstrated that a 10\% coreset subsampling ratio provides the optimal trade-off, cutting inference latency by 60\% and memory size by 80\% with no loss in accuracy.
+In this paper, we reframed the concrete surface crack inspection problem as cold-start visual anomaly detection, evaluating SPADE, PaDiM, and PatchCore frameworks across three diverse datasets. Training exclusively on normal concrete images, PatchCore (ResNet-50) achieves a near-perfect image-level AUROC of 0.9983 on the Mendeley Surface Crack dataset, generalizes strongly to DeepCrack with 1.0000 Image AUROC and 0.9507 Pixel AUROC (and 0.9599 Pixel AUROC using ResNet-18), and handles complex structures like SDNET2018 decks with 0.8859 Image AUROC. Furthermore, the framework generates high-quality anomaly heatmaps that accurately localize crack trajectories without any pixel-level supervision. Our comparative analysis confirms that a 10\% coreset subsampling ratio provides the optimal trade-off, cutting memory consumption by 90\% and accelerating inference speed by 5x compared to SPADE, while maintaining competitive detection and localization metrics.
 
 Future research will focus on extending the memory bank representation to handle heterogeneous concrete surfaces with multiple textures, integrating temporal tracking to monitor crack growth, and evaluating the framework on real-world mobile edge devices.
 
