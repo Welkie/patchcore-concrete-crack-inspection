@@ -180,7 +180,7 @@ Furthermore, we evaluate the spatial localization capacity. Across all datasets,
 \subsection{Performance Curves and Latency Behaviors}
 To visualize the performance behaviors, we refer to the curves generated in our experiments.
 
-\begin{figure}[H]
+\begin{figure}[htbp]
     \centering
     \begin{subfigure}[b]{0.48\textwidth}
         \centering
@@ -201,9 +201,9 @@ To visualize the performance behaviors, we refer to the curves generated in our 
 
 Fig.~\ref{fig:unsupervised_performance} illustrates the detection and localization performance. While the image-level AUROC (Fig.~\ref{fig:auroc_comparison}) remains stable above 0.82 across all methods and datasets, the pixel-level localization AUROC (Fig.~\ref{fig:localization_comparison}) shows that the models successfully track crack locations, reaching up to 0.9599 on DeepCrack.
 
-\begin{figure}[H]
+\begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.7\textwidth]{results/plot_unsupervised_latency_comparison.png}
+    \includegraphics[width=0.65\textwidth]{results/plot_unsupervised_latency_comparison.png}
     \caption{Average inference latency comparison of SPADE, PaDiM, and PatchCore variants (lower is better).}
     \label{fig:latency_comparison}
 \end{figure}
@@ -213,23 +213,23 @@ Fig.~\ref{fig:latency_comparison} highlights the latency curves. While SPADE has
 \subsection{Qualitative Visualization and Local Anomaly Heatmaps}
 To visually inspect the localization quality, we examine the qualitative crack heatmap overlays for the datasets in Fig.~\ref{fig:localization_surface_crack}, Fig.~\ref{fig:localization_sdnet}, and Fig.~\ref{fig:localization_deepcrack}.
 
-\begin{figure}[H]
+\begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.9\textwidth]{results/visual_localization_surface_crack.jpg}
+    \includegraphics[width=0.7\textwidth]{results/visual_localization_surface_crack.jpg}
     \caption{Qualitative Crack Heatmap Overlays on Mendeley Surface Crack Detection.}
     \label{fig:localization_surface_crack}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.9\textwidth]{results/visual_localization_sdnet2018_decks.jpg}
+    \includegraphics[width=0.7\textwidth]{results/visual_localization_sdnet2018_decks.jpg}
     \caption{Qualitative Crack Heatmap Overlays on SDNET2018 (Decks subset).}
     \label{fig:localization_sdnet}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.9\textwidth]{results/visual_localization_deepcrack_cross-eval.jpg}
+    \includegraphics[width=0.7\textwidth]{results/visual_localization_deepcrack_cross-eval.jpg}
     \caption{Qualitative Crack Heatmap Overlays on DeepCrack (Cross-dataset evaluation).}
     \label{fig:localization_deepcrack}
 \end{figure}
