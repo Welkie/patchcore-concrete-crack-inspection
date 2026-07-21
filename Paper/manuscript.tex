@@ -211,30 +211,35 @@ Fig.~\ref{fig:unsupervised_performance} illustrates the detection and localizati
 Fig.~\ref{fig:latency_comparison} highlights the latency curves. While SPADE has high inference latency (exceeding 190 ms/image due to search overhead), PaDiM and PatchCore maintain low latencies (under 50 ms/image).
 
 \subsection{Qualitative Visualization and Local Anomaly Heatmaps}
-To visually inspect the localization quality, we examine the qualitative crack heatmap overlays for the datasets in Fig.~\ref{fig:localization_surface_crack}, Fig.~\ref{fig:localization_sdnet}, and Fig.~\ref{fig:localization_deepcrack}.
+To visually inspect the localization quality, we examine the qualitative crack heatmap overlays across the three datasets in Fig.~\ref{fig:qualitative_localization}.
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.7\textwidth]{results/visual_localization_surface_crack.jpg}
-    \caption{Qualitative Crack Heatmap Overlays on Mendeley Surface Crack Detection.}
-    \label{fig:localization_surface_crack}
+    \begin{subfigure}[b]{0.52\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{results/visual_localization_surface_crack.jpg}
+        \caption{Mendeley Surface Crack Detection}
+        \label{fig:localization_surface_crack}
+    \end{subfigure}
+    \\ \vspace{0.5em}
+    \begin{subfigure}[b]{0.52\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{results/visual_localization_sdnet2018_decks.jpg}
+        \caption{SDNET2018 (Decks subset)}
+        \label{fig:localization_sdnet}
+    \end{subfigure}
+    \\ \vspace{0.5em}
+    \begin{subfigure}[b]{0.52\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{results/visual_localization_deepcrack_cross-eval.jpg}
+        \caption{DeepCrack (Cross-dataset evaluation)}
+        \label{fig:localization_deepcrack}
+    \end{subfigure}
+    \caption{Qualitative crack localization heatmap overlays across the three evaluated datasets.}
+    \label{fig:qualitative_localization}
 \end{figure}
 
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=0.7\textwidth]{results/visual_localization_sdnet2018_decks.jpg}
-    \caption{Qualitative Crack Heatmap Overlays on SDNET2018 (Decks subset).}
-    \label{fig:localization_sdnet}
-\end{figure}
-
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=0.7\textwidth]{results/visual_localization_deepcrack_cross-eval.jpg}
-    \caption{Qualitative Crack Heatmap Overlays on DeepCrack (Cross-dataset evaluation).}
-    \label{fig:localization_deepcrack}
-\end{figure}
-
-As shown in these figures, the generated anomaly heatmaps successfully trace the physical shape and location of the cracks. The heatmaps display strong peak values precisely along the crack trajectories, with zero or minimal background activation on the normal concrete areas. This localization is achieved without any pixel-level supervision or bounding box annotations during training, demonstrating the robustness of cold-start visual inspection.
+As shown in Fig.~\ref{fig:qualitative_localization}, the generated anomaly heatmaps successfully trace the physical shape and location of the cracks. The heatmaps display strong peak values precisely along the crack trajectories, with zero or minimal background activation on the normal concrete areas. This localization is achieved without any pixel-level supervision or bounding box annotations during training, demonstrating the robustness of cold-start visual inspection.
 
 \subsection{Research Limitations and Future Prospects}
 While unsupervised anomaly detection achieves excellent performance, some limitations remain:
