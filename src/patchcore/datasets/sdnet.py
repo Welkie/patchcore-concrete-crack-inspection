@@ -32,12 +32,13 @@ class SDNETDataset(torch.utils.data.Dataset):
         # Robust path resolution to handle parent wrapper directories on Kaggle
         actual_source = source
         if source and os.path.exists(source):
-            direct_exists = any(os.path.exists(os.path.join(source, f)) for f in ["Decks", "Pavements", "Walls"])
+            check_list = ["Decks", "Pavements", "Walls", "Deck", "Pavement", "Wall", "D", "P", "W"]
+            direct_exists = any(os.path.exists(os.path.join(source, f)) for f in check_list)
             if not direct_exists:
                 for d in os.listdir(source):
                     sub_path = os.path.join(source, d)
                     if os.path.isdir(sub_path):
-                        if any(os.path.exists(os.path.join(sub_path, f)) for f in ["Decks", "Pavements", "Walls"]):
+                        if any(os.path.exists(os.path.join(sub_path, f)) for f in check_list):
                             actual_source = sub_path
                             break
 
@@ -61,13 +62,15 @@ class SDNETDataset(torch.utils.data.Dataset):
         for folder in folders:
             folder_path = os.path.join(actual_source, folder)
             if not os.path.exists(folder_path):
-                # Fallback check for casing
+                # Fallback check for casing / singular vs plural / name variants
                 for d in os.listdir(actual_source):
-                    if d.lower() == folder.lower():
+                    base_kw = folder.lower()[:-1] if folder.lower().endswith('s') else folder.lower()
+                    if base_kw in d.lower():
                         folder_path = os.path.join(actual_source, d)
                         break
                         
             if not os.path.exists(folder_path):
+                print(f"WARNING: SDNET folder '{folder}' not found in actual_source '{actual_source}'")
                 continue
                 
             # Inside Decks/Pavements/Walls:
@@ -77,20 +80,36 @@ class SDNETDataset(torch.utils.data.Dataset):
                 sub_path = os.path.join(folder_path, sub)
                 if not os.path.isdir(sub_path):
                     continue
-                # Uncracked (Negative)
-                if sub.upper() in ["UD", "UP", "UW"]:
+                
+                sub_upper = sub.upper()
+                # Check for Uncracked / Negative
+                is_neg = False
+                for kw in ["UD", "UP", "UW", "UNCRACKED", "NON-CRACKED", "NON_CRACKED", "NEGATIVE", "N", "U", "GOOD"]:
+                    if kw == sub_upper or (len(kw) > 1 and kw in sub_upper):
+                        is_neg = True
+                        break
+                
+                # Check for Cracked / Positive
+                is_pos = False
+                for kw in ["CD", "CP", "CW", "CRACKED", "POSITIVE", "P", "C"]:
+                    if kw == sub_upper or (len(kw) > 1 and kw in sub_upper):
+                        is_pos = True
+                        break
+
+                if is_neg:
                     files = sorted([
                         os.path.join(sub_path, f) for f in os.listdir(sub_path)
                         if f.lower().endswith(('.png', '.jpg', '.jpeg'))
                     ])
                     neg_files.extend(files)
-                # Cracked (Positive)
-                elif sub.upper() in ["CD", "CP", "CW"]:
+                elif is_pos:
                     files = sorted([
                         os.path.join(sub_path, f) for f in os.listdir(sub_path)
                         if f.lower().endswith(('.png', '.jpg', '.jpeg'))
                     ])
                     pos_files.extend(files)
+            
+            print(f"SDNET: Found {len(neg_files)} negative and {len(pos_files)} positive files in {folder_path}")
 
         # Apply deterministic split limits (to keep size manageable)
         np.random.seed(seed)
