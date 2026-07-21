@@ -162,13 +162,7 @@ We conduct a comparative evaluation of the three unsupervised visual anomaly det
 }
 \end{table}
 
-The experimental data demonstrates that all unsupervised methods achieve high detection capability. On the Surface Crack dataset, PatchCore with ResNet-50 achieves the highest image-level AUROC of 0.9983, while on the more complex SDNET2018 Decks dataset (which contains multiple shadows and surface scaling noise), it achieves 0.8859 AUROC. In the cross-dataset evaluation on DeepCrack, all methods show near-perfect generalization to a new geological texture, reaching 1.0000 Image AUROC for SPADE and PatchCore, and 0.9930 for PaDiM.
-
-Fig.~\ref{fig:unsupervised_performance} illustrates the detection and localization performance. While the image-level AUROC (Fig.~\ref{fig:auroc_comparison}) remains stable above 0.82 across all methods and datasets, the pixel-level localization AUROC (Fig.~\ref{fig:localization_comparison}) shows that the models successfully track crack locations, reaching up to 0.9599 on DeepCrack.
-
-Fig.~\ref{fig:latency_comparison} highlights the latency curves. While SPADE has high inference latency (exceeding 190 ms/image due to search overhead), PaDiM and PatchCore maintain low latencies (under 50 ms/image).
-
-As shown in Fig.~\ref{fig:qualitative_localization}, the generated anomaly heatmaps successfully trace the physical shape and location of the cracks. The heatmaps display strong peak values precisely along the crack trajectories, with zero or minimal background activation on the normal concrete areas. This localization is achieved without any pixel-level supervision or bounding box annotations during training, demonstrating the robustness of cold-start visual inspection.
+The experimental data demonstrates that all unsupervised methods achieve high detection capability. On the Surface Crack dataset, PatchCore with ResNet-50 achieves the highest image-level AUROC of 0.9983, while on the more complex SDNET2018 Decks dataset (which contains multiple shadows and surface scaling noise), it achieves 0.8859 AUROC. In the cross-dataset evaluation on DeepCrack, all methods show near-perfect generalization to a new geological texture, reaching 1.0000 Image AUROC for SPADE and PatchCore, and 0.9930 for PaDiM. Fig.~\ref{fig:unsupervised_performance} illustrates the detection and localization performance. While the image-level AUROC (Fig.~\ref{fig:auroc_comparison}) remains stable above 0.82 across all methods and datasets, the pixel-level localization AUROC (Fig.~\ref{fig:localization_comparison}) shows that the models successfully track crack locations, reaching up to 0.9599 on DeepCrack.
 
 \begin{figure}[htbp]
     \centering
@@ -189,12 +183,16 @@ As shown in Fig.~\ref{fig:qualitative_localization}, the generated anomaly heatm
     \label{fig:unsupervised_performance}
 \end{figure}
 
+Fig.~\ref{fig:latency_comparison} highlights the latency curves. While SPADE has high inference latency (exceeding 190 ms/image due to search overhead), PaDiM and PatchCore maintain low latencies (under 50 ms/image).
+
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.65\textwidth]{results/plot_unsupervised_latency_comparison.png}
     \caption{Average inference latency comparison of SPADE, PaDiM, and PatchCore variants (lower is better).}
     \label{fig:latency_comparison}
 \end{figure}
+
+As shown in Fig.~\ref{fig:qualitative_localization}, the generated anomaly heatmaps successfully trace the physical shape and location of the cracks. The heatmaps display strong peak values precisely along the crack trajectories, with zero or minimal background activation on the normal concrete areas. This localization is achieved without any pixel-level supervision or bounding box annotations during training, demonstrating the robustness of cold-start visual inspection.
 
 \begin{figure}[htbp]
     \centering
