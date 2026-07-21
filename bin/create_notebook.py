@@ -241,7 +241,7 @@ def generate_notebook():
                     "import matplotlib.pyplot as plt\n",
                     "\n",
                     "found_any = False\n",
-                    "for backbone in [\"resnet18\", \"wideresnet50\"]:\n",
+                    "for backbone in [\"resnet18\", \"resnet50\"]:\n",
                     "    p = f\"results/visual_localization_{backbone}.png\"\n",
                     "    if os.path.exists(p):\n",
                     "        found_any = True\n",

@@ -1,0 +1,108 @@
+\relax 
+\providecommand\hyper@newdestlabel[2]{}
+\providecommand\HyField@AuxAddToFields[1]{}
+\providecommand\HyField@AuxAddToCoFields[2]{}
+\@writefile{toc}{\contentsline {title}{Cold-Start Anomaly Detection for Concrete Surface Crack Inspection using PatchCore with Pixel-Level Heatmap Localization}{1}{chapter.1}\protected@file@percent }
+\@writefile{toc}{\authcount {2}}
+\@writefile{toc}{\contentsline {author}{Lam Huynh Khang, Phan Tuan Dat, Nguyen Trong Nhan \and Nguyen Xuan Huy}{1}{chapter.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}{section.1}\protected@file@percent }
+\newlabel{sec:introduction}{{1}{1}{Introduction}{section.1}{}}
+\citation{Cha2017DeepLC,Golding2022CrackDI,liu2019computer}
+\citation{roth2022towards}
+\citation{ozgenel2018performance}
+\citation{dorafshan2018sdnet2018}
+\citation{dorafshan2018comparison}
+\citation{Cha2017DeepLC}
+\citation{zhang2016road}
+\citation{Zhang2021RealTime}
+\citation{ozgenel2018performance}
+\citation{Golding2022CrackDI,Mazni2024Identification}
+\citation{ronneberger2015u}
+\citation{liu2019computer}
+\citation{bergmann2021mvtec,bergmann2019mvtec}
+\citation{cohen2020sub}
+\citation{defard2021padim}
+\citation{yu2021fastflow}
+\citation{Deng_2022_CVPR}
+\citation{deng2024abnormal,sonbul2025bridge}
+\citation{bao2019computer,kim2023data}
+\citation{nuriev2025data}
+\@writefile{toc}{\contentsline {section}{\numberline {2}Related Work}{3}{section.2}\protected@file@percent }
+\newlabel{sec:related_work}{{2}{3}{Related Work}{section.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Supervised Concrete Crack Detection}{3}{subsection.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Unsupervised Anomaly Detection and PatchCore}{3}{subsection.2.2}\protected@file@percent }
+\citation{roth2022towards}
+\citation{akcay2022anomalib}
+\citation{ozgenel2018performance}
+\citation{dorafshan2018sdnet2018}
+\citation{he2016deep}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Materials and Methods}{4}{section.3}\protected@file@percent }
+\newlabel{sec:materials_methods}{{3}{4}{Materials and Methods}{section.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Dataset and Splitting Strategy}{4}{subsection.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}PatchCore Pipeline Architecture}{4}{subsection.3.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Feature Extraction and Neighborhood-Aware Patch Pooling}{4}{section*.2}\protected@file@percent }
+\citation{sener2018active}
+\@writefile{toc}{\contentsline {subsubsection}{Memory Bank Construction and Greedy Coreset Selection}{5}{section*.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Anomaly Scoring and Localization Heatmap}{5}{section*.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Evaluation of Pixel-Level AUROC via Pseudo-Ground-Truth Masks}{6}{subsection.3.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4}Experimental Results}{6}{section.4}\protected@file@percent }
+\newlabel{sec:results}{{4}{6}{Experimental Results}{section.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Experimental Configuration}{6}{subsection.4.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Coreset Subsampling Ablation and Execution Latency}{6}{subsection.4.2}\protected@file@percent }
+\citation{he2016deep}
+\citation{tan2019efficientnet}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces PatchCore coreset ablation results on the Concrete Surface Crack dataset showing detection performance and resource metrics.}}{7}{table.caption.5}\protected@file@percent }
+\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
+\newlabel{tab:patchcore_ablation}{{1}{7}{PatchCore coreset ablation results on the Concrete Surface Crack dataset showing detection performance and resource metrics}{table.caption.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Comparison with Supervised Classification under Data Scarcity}{7}{subsection.4.3}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Supervised baseline classification results under varying positive training sample sizes for data efficiency comparison.}}{8}{table.caption.6}\protected@file@percent }
+\newlabel{tab:supervised_baselines}{{2}{8}{Supervised baseline classification results under varying positive training sample sizes for data efficiency comparison}{table.caption.6}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Discussion}{8}{section.5}\protected@file@percent }
+\newlabel{sec:discussion}{{5}{8}{Discussion}{section.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Unsupervised Crack Detection and Localization Analysis}{8}{subsection.5.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Inference Speed vs. Data Efficiency Trade-Off}{8}{subsection.5.2}\protected@file@percent }
+\newlabel{fig:auroc_vs_coreset}{{1a}{9}{Image AUROC vs. Coreset Ratio}{figure.caption.7}{}}
+\newlabel{sub@fig:auroc_vs_coreset}{{a}{9}{Image AUROC vs. Coreset Ratio}{figure.caption.7}{}}
+\newlabel{fig:latency_vs_coreset}{{1b}{9}{Inference Latency vs. Coreset Ratio}{figure.caption.7}{}}
+\newlabel{sub@fig:latency_vs_coreset}{{b}{9}{Inference Latency vs. Coreset Ratio}{figure.caption.7}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Analysis of Coreset Subsampling Ratio Trade-off between accuracy and speed.}}{9}{figure.caption.7}\protected@file@percent }
+\newlabel{fig:coreset_tradeoff}{{1}{9}{Analysis of Coreset Subsampling Ratio Trade-off between accuracy and speed}{figure.caption.7}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Data Efficiency Comparison: Unsupervised PatchCore vs. Supervised CNNs.}}{9}{figure.caption.8}\protected@file@percent }
+\newlabel{fig:data_efficiency}{{2}{9}{Data Efficiency Comparison: Unsupervised PatchCore vs. Supervised CNNs}{figure.caption.8}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Qualitative Visualization and Local Anomaly Heatmaps}{10}{subsection.5.3}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Qualitative Crack Heatmap Overlays (ResNet-18, 10\% Coreset).}}{10}{figure.caption.9}\protected@file@percent }
+\newlabel{fig:localization_resnet18}{{3}{10}{Qualitative Crack Heatmap Overlays (ResNet-18, 10\% Coreset)}{figure.caption.9}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Qualitative Crack Heatmap Overlays (ResNet-50, 10\% Coreset).}}{11}{figure.caption.10}\protected@file@percent }
+\newlabel{fig:localization_resnet50}{{4}{11}{Qualitative Crack Heatmap Overlays (ResNet-50, 10\% Coreset)}{figure.caption.10}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.4}Research Limitations and Future Prospects}{11}{subsection.5.4}\protected@file@percent }
+\bibstyle{splncs03_unsrt}
+\bibdata{references}
+\bibcite{Cha2017DeepLC}{1}
+\bibcite{Golding2022CrackDI}{2}
+\bibcite{liu2019computer}{3}
+\bibcite{roth2022towards}{4}
+\bibcite{ozgenel2018performance}{5}
+\bibcite{dorafshan2018sdnet2018}{6}
+\bibcite{dorafshan2018comparison}{7}
+\@writefile{toc}{\contentsline {section}{\numberline {6}Conclusion and Future Work}{12}{section.6}\protected@file@percent }
+\newlabel{sec:conclusion}{{6}{12}{Conclusion and Future Work}{section.6}{}}
+\bibcite{zhang2016road}{8}
+\bibcite{Zhang2021RealTime}{9}
+\bibcite{Mazni2024Identification}{10}
+\bibcite{ronneberger2015u}{11}
+\bibcite{bergmann2021mvtec}{12}
+\bibcite{bergmann2019mvtec}{13}
+\bibcite{cohen2020sub}{14}
+\bibcite{defard2021padim}{15}
+\bibcite{yu2021fastflow}{16}
+\bibcite{Deng_2022_CVPR}{17}
+\bibcite{deng2024abnormal}{18}
+\bibcite{sonbul2025bridge}{19}
+\bibcite{bao2019computer}{20}
+\bibcite{kim2023data}{21}
+\bibcite{nuriev2025data}{22}
+\bibcite{akcay2022anomalib}{23}
+\bibcite{he2016deep}{24}
+\bibcite{sener2018active}{25}
+\bibcite{tan2019efficientnet}{26}
+\gdef \@abspage@last{14}

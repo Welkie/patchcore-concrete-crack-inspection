@@ -1,0 +1,140 @@
+\begin{thebibliography}{10}
+\providecommand{\url}[1]{\texttt{#1}}
+\providecommand{\urlprefix}{URL }
+
+\bibitem{Cha2017DeepLC}
+Cha, Y.J., Choi, W., B{\"{u}}y{\"{u}}k{\"{o}}zt{\"{u}}rk, O.: Deep
+  learning-based crack damage detection using convolutional neural networks.
+  Computer-Aided Civil and Infrastructure Engineering  32(5),  361--378 (2017),
+  \url{https://doi.org/10.1111/mice.12263}
+
+\bibitem{Golding2022CrackDI}
+Golding, V.P., Gharineiat, Z., Munawar, H.S., Ullah, F.: Crack detection in
+  concrete structures using deep learning. Sustainability  14(13),  8117 (2022)
+
+\bibitem{liu2019computer}
+Liu, Z., Cao, Y., Wang, Y., Wang, W.: Computer vision-based concrete crack
+  detection using u-net fully convolutional networks. Automation in
+  Construction  104,  129--136 (2019)
+
+\bibitem{roth2022towards}
+Roth, K., Pemula, L., Zepeda, J., Sch{\"o}lkopf, B., Brox, T., Gehler, P.:
+  Towards total recall in industrial anomaly detection. In: Proceedings of the
+  IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR). pp.
+  14298--14308 (2022)
+
+\bibitem{ozgenel2018performance}
+{\"O}zgenel, {\c{C}}.F., G{\"o}nen{\c{c}}~Sorgu{\c{c}}, A.: Performance
+  comparison of pretrained convolutional neural networks on crack detection in
+  buildings. In: Proceedings of the 35th International Symposium on Automation
+  and Robotics in Construction (ISARC). pp. 693--700. IAARC (2018)
+
+\bibitem{dorafshan2018sdnet2018}
+Dorafshan, S., Thomas, R.J., Maguire, M.: Sdnet2018: An annotated image dataset
+  for non-contact concrete crack detection using deep convolutional neural
+  networks. Data in Brief  21,  1664--1668 (2018)
+
+\bibitem{dorafshan2018comparison}
+Dorafshan, S., Thomas, R.J., Maguire, M.: Comparison of deep convolutional
+  neural networks and edge detectors for image-based crack detection in
+  concrete. Construction and Building Materials  186,  1031--1045 (2018)
+
+\bibitem{zhang2016road}
+Zhang, L., Yang, F., Zhang, Y.D., Zhu, Y.J.: Road crack detection using deep
+  convolutional neural network. In: 2016 IEEE International Conference on Image
+  Processing (ICIP). pp. 3708--3712. IEEE (2016)
+
+\bibitem{Zhang2021RealTime}
+Zhang, Q., Barri, K., Babanajad, S.K., Alavi, A.H.: Real-time detection of
+  cracks on concrete bridge decks using deep learning in the frequency domain.
+  Engineering  7(12),  1786--1796 (2021)
+
+\bibitem{Mazni2024Identification}
+Mazni, M., Husain, A.R., Shapiai, M.I., Ibrahim, I.S., Zulkifli, R., Anggara,
+  D.W.: Identification of concrete cracks using deep learning models: A
+  systematic review. IEEE Access  12,  11234--11252 (2024)
+
+\bibitem{ronneberger2015u}
+Ronneberger, O., Fischer, P., Brox, T.: U-net: Convolutional networks for
+  biomedical image segmentation. In: International Conference on Medical Image
+  Computing and Computer-Assisted Intervention. pp. 234--241. Springer (2015)
+
+\bibitem{bergmann2021mvtec}
+Bergmann, P., Batzner, K., Fauser, M., Sattlegger, D., Steger, C.: The mvtec
+  anomaly detection dataset: A comprehensive real-world dataset for
+  unsupervised anomaly detection. International Journal of Computer Vision
+  129(4),  1038--1059 (2021)
+
+\bibitem{bergmann2019mvtec}
+Bergmann, P., Fauser, M., Sattlegger, D., Steger, C.: Mvtec ad--a comprehensive
+  real-world dataset for unsupervised anomaly detection. In: Proceedings of the
+  IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR). pp.
+  9584--9592 (2019)
+
+\bibitem{cohen2020sub}
+Cohen, N., Hoshen, Y.: Sub-image anomaly detection with deep pyramid
+  correspondences. arXiv preprint arXiv:2005.02357  (2020)
+
+\bibitem{defard2021padim}
+Defard, T., Setkov, A., Loesch, A., Audigier, R.: Padim: a patch distribution
+  modeling framework for anomaly detection and localization. In: Pattern
+  Recognition. ICPR International Workshops and Challenges: Virtual Event,
+  January 10-15, 2021, Proceedings, Part IV. pp. 475--489. Springer (2021)
+
+\bibitem{yu2021fastflow}
+Yu, J., Zheng, Y., Wang, X., Li, W., Wu, Y., Zhao, R., Wu, L.: Fastflow:
+  Unsupervised anomaly detection and localization via 2d normalizing flows.
+  arXiv preprint arXiv:2111.07677  (2021)
+
+\bibitem{Deng_2022_CVPR}
+Deng, H., Li, X.: Anomaly detection via reverse distillation from one-class
+  embedding. In: Proceedings of the IEEE/CVF Conference on Computer Vision and
+  Pattern Recognition (CVPR). pp. 9737--9746 (June 2022)
+
+\bibitem{deng2024abnormal}
+Deng, Y., Zhao, Y., Ju, H., Yi, T.H., Li, A.: Abnormal data detection for
+  structural health monitoring: State-of-the-art review. Developments in the
+  Built Environment  17,  100337 (2024)
+
+\bibitem{sonbul2025bridge}
+Sonbul, O.S., Rashid, M.: Bridge structural health monitoring: A
+  multi-dimensional taxonomy and evaluation of anomaly detection methods.
+  Buildings  15(19),  3603 (2025)
+
+\bibitem{bao2019computer}
+Bao, Y., Tang, Z., Li, H., Zhang, Y.: Computer vision and deep learning-based
+  data anomaly detection method for structural health monitoring. Structural
+  Health Monitoring  18(2),  401--421 (2019)
+
+\bibitem{kim2023data}
+Kim, S.Y., Mukhiddinov, M.: Data anomaly detection for structural health
+  monitoring based on a convolutional neural network. Sensors  23(20),  8525
+  (2023)
+
+\bibitem{nuriev2025data}
+Nuriev, S., Kwon, J.H., Kim, Y., Kong, M.J., Lee, J.J.: Data anomaly detection
+  in structural health monitoring using modified transformer encoders with
+  1d-cnn layers. Smart Structures and Systems  35(6) (2025)
+
+\bibitem{akcay2022anomalib}
+Akcay, S., Ameln, D., Vaidya, A., Lakshmanan, B., Ahuja, N., Genc, U.:
+  Anomalib: A deep learning library for anomaly detection. In: 2022 IEEE
+  International Conference on Image Processing (ICIP). pp. 1706--1710. IEEE
+  (2022)
+
+\bibitem{he2016deep}
+He, K., Zhang, X., Ren, S., Sun, J.: Deep residual learning for image
+  recognition. In: Proceedings of the IEEE Conference on Computer Vision and
+  Pattern Recognition (CVPR). pp. 770--778 (2016)
+
+\bibitem{sener2018active}
+Sener, O., Savarese, S.: Active learning for convolutional neural networks: A
+  core-set approach. In: International Conference on Learning Representations
+  (ICLR) (2018), \url{https://openreview.net/forum?id=H1aIUK-RW}
+
+\bibitem{tan2019efficientnet}
+Tan, M., Le, Q.: Efficientnet: Rethinking model scaling for convolutional
+  neural networks. In: International Conference on Machine Learning (ICML). pp.
+  6102--6111. PMLR (2019)
+
+\end{thebibliography}
